@@ -13,12 +13,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-//import org.springframework.stereotype.Service;
+//import org.springframework.stereotype.Service;  // look to have a SpringWorkflowEngine which contains this
 
 /**
  * @author: ksipe
  */
-//@Service
 public class WorkflowEngine {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
@@ -44,19 +43,12 @@ public class WorkflowEngine {
     public String invokeAction(Workflow workflow, WorkflowComponent component, Action action) {
 
         String currentState = component.getStatus();
-        List<Action> actions = getAvailableActions(workflow, currentState);
-        if (!actions.contains(action)) {
+        if (!isValidAction(workflow, currentState, action)) {
             throw new InvalidWorkflowException("invoked action: " + action.getName() + " invalidated for state: " + currentState);
         }
 
-        WorkflowState workflowState = workflow.getState(currentState);
-        if (workflowState.isFinalState()) {
-            throw new InvalidWorkflowException("invoked action: " + action.getName() + " on final state not allowed");
-        }
-        ActionHandler handler = null;
-        if (workflow.getState(workflowState.getStateForAction(action).getName()) != null)
-            handler = workflow.getState(workflowState.getStateForAction(action).getName()).getTransitionHandler();
-        // consider a list of action handlers... that would be better
+        WorkflowState workflowState = getWorkflowState(workflow, action, currentState);
+        ActionHandler handler = getActionHandler(workflow, action, workflowState);
 
         if (continueAfterBeforeAction(handler, component)) {
             currentState = getNextStateName(workflowState, action);
@@ -65,6 +57,28 @@ public class WorkflowEngine {
         }
 
         return currentState;
+    }
+
+    private boolean isValidAction(Workflow workflow, String currentState, Action action) {
+        List<Action> actions = getAvailableActions(workflow, currentState);
+        return actions.contains(action);
+    }
+
+    private WorkflowState getWorkflowState(Workflow workflow, Action action, String currentState) {
+        WorkflowState workflowState = workflow.getState(currentState);
+        if (workflowState.isFinalState()) {
+            throw new InvalidWorkflowException("invoked action: " + action.getName() + " on final state not allowed");
+        }
+        return workflowState;
+    }
+
+    private ActionHandler getActionHandler(Workflow workflow, Action action, WorkflowState workflowState) {
+        ActionHandler handler = null;
+        if (workflow.getState(workflowState.getStateForAction(action).getName()) != null) {
+            handler = workflow.getState(workflowState.getStateForAction(action).getName()).getTransitionHandler();
+        }
+        // consider a list of action handlers... that would be better
+        return handler;
     }
 
     private void invokeHandlerOnAction(WorkflowComponent component, ActionHandler handler) {
