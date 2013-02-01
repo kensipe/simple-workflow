@@ -1,0 +1,35 @@
+apply plugin: 'sonar'
+apply plugin: 'checkstyle'
+apply plugin: 'findbugs'
+apply plugin: 'pmd'
+apply plugin: 'project-report'
+apply plugin: 'jdepend'
+
+// stupid... stupid... stupid... there is an issue with gradle have dependsOn dynamic tasks... where respecifying it fixes it.
+// read for more details: https://github.com/valkolovos/gradle_cobertura/issues/18
+/*coberturaXml.dependsOn cleanTest
+
+sonar {
+    project {
+        coberturaReportPath = file('build/reports/cobertura/coverage.xml')
+    }
+    server {
+        url = "http://localhost:9000"
+    }
+    database {
+        url = "jdbc:h2:tcp://localhost:9092/sonar"
+        driverClassName = "org.h2.Driver"
+        username = "sonar"
+        password = "sonar"
+    }
+}
+*/
+
+
+//findbugs {
+//    excludeFilter = file("$rootProject.projectDir/config/findbugs/excludeFilter.xml")
+//}
+// this is the current fix
+tasks.withType(FindBugs) {
+  excludeFilter = file("$rootProject.projectDir/config/findbugs/excludeFilter.xml")
+}

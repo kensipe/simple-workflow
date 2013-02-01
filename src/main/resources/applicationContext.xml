@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="
+       http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/util
+       http://www.springframework.org/schema/util/spring-util-3.1.xsd">
+
+    <context:annotation-config/>
+
+    <context:component-scan base-package="com.mentor"/>
+
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="ignoreUnresolvablePlaceholders" value="true"/>
+        <property name="ignoreResourceNotFound" value="true"/>
+        <property name="systemPropertiesModeName" value="SYSTEM_PROPERTIES_MODE_OVERRIDE"/>
+        <property name="locations">
+            <list>
+                <value>classpath:application.properties</value>
+                <value>file:${user.home}/application.properties</value>
+                <value>classpath*:${HOSTNAME}.properties</value>
+                <!-- this one takes priority -->
+            </list>
+        </property>
+    </bean>
+
+    <bean id="messageSource" class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:messages"/>
+        <property name="defaultEncoding" value="${source.encoding}"/>
+    </bean>
+
+    <!-- these are properties to be injected into the web tag space (ex: HRefManagedTag -->
+    <util:map id="props" map-class="java.util.HashMap">
+        <entry key="external.dir" value="${external.dir}"/>
+        <entry key="static.context" value="${static.context}"/>
+        <entry key="static.dir" value="${static.dir}"/>
+        <entry key="flash.context" value="${flash.context}"/>
+        <entry key="flash.installer.macosx" value="${flash.installer.macosx}"/>
+        <entry key="flash.installer.ie" value="${flash.installer.ie}"/>
+        <entry key="flash.installer.non_ie" value="${flash.installer.non_ie}"/>
+        <entry key="media.config.file" value="${media.config.file}"/>
+        <entry key="summary.catalog.file" value="${summary.catalog.file}"/>
+        <entry key="flight.dir" value="${flight.dir}"/>
+        <entry key="flash.dir" value="${flash.dir}"/>
+        <entry key="appversion" value="${appversion}"/>
+        <entry key="appbuild" value="${appbuild}"/>
+        <entry key="android.link" value="${android.link}"/>
+        <entry key="httpPort" value="${httpPort}"/>
+        <entry key="httpsPort" value="${httpsPort}"/>
+        <entry key="skin" value="${skin}"/>
+        <entry key="verification.command.fullpath" value="${verification.command.fullpath}"/>
+        <entry key="verification.argument" value="${verification.argument}"/>
+        <entry key="ground.url" value="${ground.url}"/>
+        <entry key="ground.widevine.context" value="${ground.widevine.context}"/>
+
+    </util:map>
+
+</beans>

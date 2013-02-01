@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<workflow>
+
+	<initial-state id="Begin">
+        <actions>
+            <action id="first"/>
+            <action id="second" state="SecondState" />
+        </actions>
+    </initial-state>
+
+    <states>
+        <state id="FirstState">
+            <actions>
+                <action id="second" state="SecondState" />
+            </actions>
+        </state>
+
+        <state id="SecondState" handler="com.mentor.workflow.DummyStateChangeHandler">
+            <actions>
+                <action id="first" state="FirstState"/>
+                <action id="finished" state="Final" />
+            </actions>
+        </state>
+
+        <state id="Final" /> <!-- final states can be assumed as states with no actions-->
+    </states>
+
+    <!-- maybe even -->
+    <common-actions>
+        <action id="first" state="FirstState" />
+    </common-actions>
+</workflow>
+

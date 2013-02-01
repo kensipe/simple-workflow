@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSpy v2011 (http://www.altova.com) by Ken Sipe -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+	<xs:element name="workflow">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:all>
+				<xs:element name="initial-state">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="actions">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="action" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:attribute name="id" use="required"/>
+												<xs:attribute name="state"/>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+						<xs:attribute name="id" use="required"/>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="states">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="state" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="actions" minOccurs="0" maxOccurs="unbounded">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="action" maxOccurs="unbounded">
+														<xs:complexType>
+															<xs:attribute name="id" use="required"/>
+															<xs:attribute name="state"/>
+														</xs:complexType>
+													</xs:element>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+									<xs:attribute name="id" use="required"/>
+									<xs:attribute name="handler"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="common-actions" minOccurs="0">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="action" maxOccurs="unbounded">
+								<xs:complexType>
+									<xs:attribute name="id" use="required"/>
+									<xs:attribute name="state" use="required"/>
+								</xs:complexType>
+							</xs:element>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+			</xs:all>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>

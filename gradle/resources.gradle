@@ -1,0 +1,18 @@
+afterEvaluate {
+
+    configure(allProcessResourcesTasks()) {
+        def buildNumber = System.getenv().BUILD_NUMBER
+        if (!buildNumber) {
+            buildNumber = "NA"
+        }
+
+        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [version: project.version])
+        filter(org.apache.tools.ant.filters.ReplaceTokens, tokens: [build: buildNumber])
+    }
+}
+
+def allProcessResourcesTasks() {
+    sourceSets*.processResourcesTaskName.collect {
+        tasks[it]
+    }
+}
