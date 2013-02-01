@@ -1,7 +1,7 @@
 package com.mentor.workflow.client.workflow;
 
 
-import com.mentor.workflow.client.Opportunity;
+import com.mentor.workflow.client.WorkflowComponent;
 
 /**
  * @author ksipe
@@ -11,15 +11,16 @@ public interface ActionHandler {
     /**
      * A pre-action transition safe guard to determine whether the transition should occur
      *
-     * @param opportunity the opportunity for which this workflow applies will be passed in
+     * @param component the component for which this workflow applies will be passed in
      * @return a boolean that determines whether the action transition should occur
      */
-    boolean beforeAction(Opportunity opportunity);
+    boolean beforeAction(WorkflowComponent component);
 
     /**
-     * A callback handler that will be fired on successful transition to this state
+     * A callback handler that will be fired on successful transition to this state the component will
+     * have the state updated
      *
-     * @param opportunity the opportunity for which this workflow applies will be passed in
+     * @param component the component for which this workflow applies will be passed in
      */
-    void onAction(Opportunity opportunity);
+    void onAction(WorkflowComponent component);
 }

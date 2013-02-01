@@ -1,8 +1,7 @@
 package com.mentor.workflow.client.workflow.engine;
 
-import com.mentor.workflow.client.Opportunity;
+import com.mentor.workflow.client.WorkflowComponent;
 import com.mentor.workflow.client.workflow.Action;
-import com.mentor.workflow.client.workflow.ActionHandler;
 import com.mentor.workflow.client.workflow.ActionStateMapping;
 import com.mentor.workflow.client.workflow.Workflow;
 import com.mentor.workflow.client.workflow.WorkflowState;
@@ -97,7 +96,7 @@ public class WorkflowEngineTest {
 //    @Test ignore for now
     public void invokeActionDoesNotChangeState_WhenTransitionHandlerReturnsFalse() {
 //        ActionHandler handler = createMock(ActionHandler.class);
-//        expect(handler.beforeAction(isA(Opportunity.class))).andReturn(false);
+//        expect(handler.beforeAction(isA(WorkflowComponent.class))).andReturn(false);
 //        replay(handler);
 
         WorkflowState state = buildStateWithActions("state");
@@ -108,10 +107,10 @@ public class WorkflowEngineTest {
         states.add(state);
         workflow.setWorkflowStates(states);
 
-        Opportunity opportunity = new Opportunity();
-        opportunity.setStatus("initial");
+        WorkflowComponent component = new WorkflowComponent();
+        component.setStatus("initial");
 
-        String stateAfterInvokeAttempt = engine.invokeAction(workflow, opportunity, new Action("try"));
+        String stateAfterInvokeAttempt = engine.invokeAction(workflow, component, new Action("try"));
         assertEquals("initial", stateAfterInvokeAttempt);
 //        verify(handler);
     }
@@ -119,8 +118,8 @@ public class WorkflowEngineTest {
     @Test
     public void invokeActionChangesState_WhenBeforeHandlerReturnsTrue() {
 //        ActionHandler handler = createMock(ActionHandler.class);
-//        expect(handler.beforeAction(isA(Opportunity.class))).andReturn(true);
-//        handler.onAction(isA(Opportunity.class));
+//        expect(handler.beforeAction(isA(WorkflowComponent.class))).andReturn(true);
+//        handler.onAction(isA(WorkflowComponent.class));
 //        replay(handler);
 
         WorkflowState state = buildStateWithActions("state");
@@ -131,10 +130,10 @@ public class WorkflowEngineTest {
         states.add(state);
         workflow.setWorkflowStates(states);
 
-        Opportunity opportunity = new Opportunity();
-        opportunity.setStatus("initial");
+        WorkflowComponent component = new WorkflowComponent();
+        component.setStatus("initial");
 
-        String stateAfterInvokeAttempt = engine.invokeAction(workflow, opportunity, new Action("try"));
+        String stateAfterInvokeAttempt = engine.invokeAction(workflow, component, new Action("try"));
         assertEquals("state", stateAfterInvokeAttempt);
 //        verify(handler);
     }
@@ -145,10 +144,10 @@ public class WorkflowEngineTest {
         states.add(buildStateWithActions("state"));
         workflow.setWorkflowStates(states);
 
-        Opportunity opportunity = new Opportunity();
-        opportunity.setStatus("state");
+        WorkflowComponent component = new WorkflowComponent();
+        component.setStatus("state");
 
-        String stateAfterInvokeAttempt = engine.invokeAction(workflow, opportunity, new Action("action"));
+        String stateAfterInvokeAttempt = engine.invokeAction(workflow, component, new Action("action"));
         assertEquals("nextState", stateAfterInvokeAttempt);
     }
 

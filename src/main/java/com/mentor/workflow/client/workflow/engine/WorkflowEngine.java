@@ -1,6 +1,6 @@
 package com.mentor.workflow.client.workflow.engine;
 
-import com.mentor.workflow.client.Opportunity;
+import com.mentor.workflow.client.WorkflowComponent;
 import com.mentor.workflow.client.exception.InvalidWorkflowException;
 import com.mentor.workflow.client.workflow.Action;
 import com.mentor.workflow.client.workflow.ActionHandler;
@@ -41,12 +41,12 @@ public class WorkflowEngine {
         return actions;
     }
 
-    public String invokeAction(Workflow workflow, Opportunity opportunity, Action action) {
+    public String invokeAction(Workflow workflow, WorkflowComponent component, Action action) {
 
-        String currentState = opportunity.getStatus();
+        String currentState = component.getStatus();
         List<Action> actions = getAvailableActions(workflow, currentState);
         if (!actions.contains(action)) {
-            throw new InvalidWorkflowException("invoked action: " + action.getName() + " invalidated for current state");
+            throw new InvalidWorkflowException("invoked action: " + action.getName() + " invalidated for state: " + currentState);
         }
 
         WorkflowState workflowState = workflow.getState(currentState);
@@ -56,19 +56,38 @@ public class WorkflowEngine {
         ActionHandler handler = null;
         if (workflow.getState(workflowState.getStateForAction(action).getName()) != null)
             handler = workflow.getState(workflowState.getStateForAction(action).getName()).getTransitionHandler();
-        if (handler != null) {
+        // consider a list of action handlers... that would be better
 
-            if (handler.beforeAction(opportunity)) {
-                // set state for actionHandler callback (persisted in OpportunityManagerImpl afterwards),
-                // so state appears to have changed for api users writing ActionHandlers
-                opportunity.setStatus(getNextStateName(workflowState, action));
-                handler.onAction(opportunity);
-            } else {
-                return currentState;
-            }
+        if (continueAfterBeforeAction(handler, component)) {
+            currentState = getNextStateName(workflowState, action);
+            component.setStatus(currentState);
+            invokeHandlerOnAction(component, handler);
         }
 
-        return getNextStateName(workflowState, action);
+        return currentState;
+    }
+
+    private void invokeHandlerOnAction(WorkflowComponent component, ActionHandler handler) {
+        if (handler != null) {
+            try {
+                handler.onAction(component);
+            } catch (Exception e) {
+                logger.error("error on handler.onAction {}", handler.getClass(), e);
+            }
+        }
+    }
+
+    private boolean continueAfterBeforeAction(ActionHandler handler, WorkflowComponent component) {
+        boolean continueWorkflow = true;
+        if (handler != null) {
+            try {
+                continueWorkflow = handler.beforeAction(component);
+            } catch (Exception e) {
+                logger.error("handler failure: {}", handler.getClass(), e);
+                continueWorkflow = false;
+            }
+        }
+        return continueWorkflow;
     }
 
     private String getNextStateName(WorkflowState workflowState, Action action) {

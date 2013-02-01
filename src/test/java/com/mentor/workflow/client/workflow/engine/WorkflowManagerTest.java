@@ -55,7 +55,7 @@ public class WorkflowManagerTest extends TestCase {
     // todo:  get these working
 //    public void testGetActions() throws Exception {
 //
-//        Opportunity opportunity = new Opportunity();
+//        WorkflowComponent opportunity = new WorkflowComponent();
 //        opportunity.setOppType("DummyPlugin");
 //        opportunity.setStatus("Begin");
 //
@@ -90,7 +90,7 @@ public class WorkflowManagerTest extends TestCase {
 
     // todo:  get these working!!!
 //    public void testInvokeAction() throws Exception {
-//        Opportunity opportunity = new Opportunity();
+//        WorkflowComponent opportunity = new WorkflowComponent();
 //        opportunity.setOppType("DummyPlugin");
 //        opportunity.setStatus("Begin");
 //        String status = workflowManager.invokeAction(opportunity, new Action("first"));

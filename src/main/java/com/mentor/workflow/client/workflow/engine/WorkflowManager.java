@@ -1,6 +1,6 @@
 package com.mentor.workflow.client.workflow.engine;
 
-import com.mentor.workflow.client.Opportunity;
+import com.mentor.workflow.client.WorkflowComponent;
 import com.mentor.workflow.client.exception.InvalidWorkflowException;
 import com.mentor.workflow.client.workflow.Action;
 import com.mentor.workflow.client.workflow.Workflow;
@@ -76,46 +76,46 @@ public class WorkflowManager {
         return workflowConfiguration == null || workflowConfiguration.getWorkflow() == null;
     }
 
-    public List<Action> getActions(Opportunity opportunity) {
+    public List<Action> getActions(WorkflowComponent component) {
 
         List<Action> actions;
-        Workflow workflow = getWorkflow(opportunity);
+        Workflow workflow = getWorkflow(component);
 
         if (workflow != null) {
-            actions = workflowEngine.getAvailableActions(workflow, opportunity.getStatus());
+            actions = workflowEngine.getAvailableActions(workflow, component.getStatus());
         } else {
-            logger.error("opp-type: " + opportunity.getOppType() + " requested workflow actions when a workflow has been configured");
+            logger.error("Managed component requested workflow actions when a workflow has been configured");
             actions = new ArrayList<Action>();
         }
 
         return actions;
     }
 
-    private Workflow getWorkflow(Opportunity opportunity) {
+    private Workflow getWorkflow(WorkflowComponent component) {
 
-        logger.debug(opportunity.getStatus());  // todo:  bogus.. rewrite
-//        OpportunityPlugin plugin = pluginMan.getPlugin(opportunity.getOppType());
-//        validatePlugin(opportunity, plugin);
+        logger.debug(component.getStatus());  // todo:  bogus.. rewrite
+//        OpportunityPlugin plugin = pluginMan.getPlugin(component.getOppType());
+//        validatePlugin(component, plugin);
         // todo:  obviously rewrite this!
         WorkflowConfiguration workflowConfiguration = new XmlWorkflowConfiguration("");
         return workflowConfiguration.getWorkflow();
     }
 
-    public String invokeAction(Opportunity opportunity, Action action) {
+    public String invokeAction(WorkflowComponent component, Action action) {
 
         String status = "";
-        Workflow workflow = getWorkflow(opportunity);
+        Workflow workflow = getWorkflow(component);
         if (workflow != null) {
             try {
-                status = workflowEngine.invokeAction(workflow, opportunity, action);
+                status = workflowEngine.invokeAction(workflow, component, action);
             } catch (InvalidWorkflowException e) {
-                String message = "plugin: " + opportunity.getOppType() + " " + e.getMessage();
+                String message = e.getMessage(); // improve
                 logger.error(message);
                 throw new InvalidWorkflowException(message);
             }
 
         } else {
-            logger.error("opp-type: " + opportunity.getOppType() + " invoked action: " + action.getName());
+            logger.error("workflow component: {} invoked action: {}", component.getId(), action.getName());
         }
         return status;
     }
