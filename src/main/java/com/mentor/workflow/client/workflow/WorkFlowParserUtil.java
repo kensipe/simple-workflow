@@ -26,7 +26,6 @@ import java.util.Set;
 
 /**
  * Util class used by XmlWorkflowConfiguration class to generate workflow by validating & parsing user specified XML.
- * Plugin writers may use the schema file located under resources to quickly validate their XMLs at creation time using tools like XML Spy.
  *
  * @author ksipe
  */
@@ -104,8 +103,8 @@ public class WorkFlowParserUtil {
 
     private Document getDOMHandle(String filename) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        Document doc = null;
-        DocumentBuilder db = null;
+        Document doc;
+        DocumentBuilder db;
         try {
             db = dbf.newDocumentBuilder();
             doc = db.parse(getInputStreamFrom(filename));
