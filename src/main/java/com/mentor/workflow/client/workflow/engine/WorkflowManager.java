@@ -6,13 +6,16 @@ import com.mentor.workflow.client.workflow.Action;
 import com.mentor.workflow.client.workflow.Workflow;
 import com.mentor.workflow.client.workflow.WorkflowConfiguration;
 import com.mentor.workflow.client.workflow.WorkflowState;
-import org.apache.log4j.Logger;
-//import org.springframework.beans.factory.annotation.Autowired;
-//import org.springframework.context.ApplicationContext;
-//import org.springframework.stereotype.Service;
+import com.mentor.workflow.client.workflow.XmlWorkflowConfiguration;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
+
+//import org.springframework.beans.factory.annotation.Autowired;
+//import org.springframework.context.ApplicationContext;
+//import org.springframework.stereotype.Service;
 
 /**
  * Coordinates all the workflow logic.
@@ -20,35 +23,36 @@ import java.util.List;
  * @author: ksipe
  */
 //@Service
-public class WorkflowManager  {
+public class WorkflowManager {
 
     // todo:  create a spring workflow mgr
-    static Logger logger = Logger.getLogger(WorkflowManager.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
-//    @Autowired
-    private WorkflowEngine workflowEngine;
+    //    @Autowired
+    private WorkflowEngine workflowEngine = new WorkflowEngine();
 
 //    @Autowired
 //    private ApplicationContext ctx;
 
-    public void register()  {
+    public void register() {
 
-        WorkflowConfiguration workflowConfiguration = null; //plugin.getWorkflowConfiguration();
-    	if (isWorkflowConfig(workflowConfiguration)) {
+        // todo:  obviously rewrite!
+        WorkflowConfiguration workflowConfiguration = new XmlWorkflowConfiguration("");
+        if (isWorkflowConfig(workflowConfiguration)) {
             logger.debug("plugin has no workflow configuration");
             return;
         }
         Workflow workflow = workflowConfiguration.getWorkflow();
-      
-        if(workflow.getInitialState() == null) {
 
+        if (workflow.getInitialState() == null) {
+            logger.error("no initial state!");
         }
     }
-    
+
     private boolean isWorkflowConfig(WorkflowConfiguration workflowConfiguration) {
-        	return workflowConfiguration == null ||  workflowConfiguration.getWorkflow()== null;
-	}
-		
+        return workflowConfiguration == null || workflowConfiguration.getWorkflow() == null;
+    }
+
     public void registerActionHandlers(WorkflowConfiguration config) {
 
         if (isInvalidWorkflowConfig(config)) {
@@ -56,19 +60,20 @@ public class WorkflowManager  {
             return;
         }
 
-        Workflow workflow =  config.getWorkflow();
+        Workflow workflow = config.getWorkflow();
 
         logger.debug("Plugin: " + config);
 
         for (WorkflowState state : workflow.getWorkflowStates()) {
             if (state.getTransitionHandler() != null) {
+                logger.debug("dummy stuff because it isn't spring");  // todo:  fix me!
 //                ctx.getAutowireCapableBeanFactory().autowireBean(state.getTransitionHandler());
             }
         }
     }
-    
+
     private boolean isInvalidWorkflowConfig(WorkflowConfiguration workflowConfiguration) {
-        return workflowConfiguration == null ||  workflowConfiguration.getWorkflow() == null;
+        return workflowConfiguration == null || workflowConfiguration.getWorkflow() == null;
     }
 
     public List<Action> getActions(Opportunity opportunity) {
@@ -88,11 +93,12 @@ public class WorkflowManager  {
 
     private Workflow getWorkflow(Opportunity opportunity) {
 
+        logger.debug(opportunity.getStatus());  // todo:  bogus.. rewrite
 //        OpportunityPlugin plugin = pluginMan.getPlugin(opportunity.getOppType());
 //        validatePlugin(opportunity, plugin);
-
-        WorkflowConfiguration workflowConfiguration = null; //plugin.getWorkflowConfiguration();
-        return workflowConfiguration != null ? workflowConfiguration.getWorkflow() : null;
+        // todo:  obviously rewrite this!
+        WorkflowConfiguration workflowConfiguration = new XmlWorkflowConfiguration("");
+        return workflowConfiguration.getWorkflow();
     }
 
     public String invokeAction(Opportunity opportunity, Action action) {
@@ -100,7 +106,6 @@ public class WorkflowManager  {
         String status = "";
         Workflow workflow = getWorkflow(opportunity);
         if (workflow != null) {
-
             try {
                 status = workflowEngine.invokeAction(workflow, opportunity, action);
             } catch (InvalidWorkflowException e) {

@@ -1,7 +1,6 @@
 package com.mentor.workflow.client.workflow;
 
 
-
 /**
  * A convenience abstract class for creating an ActionHandler implementation with an already-autowired instance of
  * OpportunityManager

@@ -12,11 +12,15 @@ import java.util.Set;
  */
 public class Workflow {
 
-    protected String name;
-    protected WorkflowState initialState;
-    protected Map<String, WorkflowState> stateMap = new HashMap<String, WorkflowState>();
+    private String name;
+    private WorkflowState initialState;
+    private Map<String, WorkflowState> stateMap = new HashMap<String, WorkflowState>();
 
     public Workflow() {
+    }
+
+    public Workflow(String name) {
+        this.name = name;
     }
 
     public Workflow(Set<WorkflowState> states) {

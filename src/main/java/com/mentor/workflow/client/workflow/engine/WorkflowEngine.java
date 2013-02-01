@@ -6,12 +6,14 @@ import com.mentor.workflow.client.workflow.Action;
 import com.mentor.workflow.client.workflow.ActionHandler;
 import com.mentor.workflow.client.workflow.Workflow;
 import com.mentor.workflow.client.workflow.WorkflowState;
-import org.apache.log4j.Logger;
-//import org.springframework.stereotype.Service;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+
+//import org.springframework.stereotype.Service;
 
 /**
  * @author: ksipe
@@ -19,7 +21,7 @@ import java.util.List;
 //@Service
 public class WorkflowEngine {
 
-    private static Logger logger = Logger.getLogger(WorkflowEngine.class);
+    private final Logger logger = LoggerFactory.getLogger(getClass());
 
     public List<Action> getAvailableActions(Workflow workflow, String currentState) {
         WorkflowState workflowState = workflow.getState(currentState);
@@ -52,8 +54,8 @@ public class WorkflowEngine {
             throw new InvalidWorkflowException("invoked action: " + action.getName() + " on final state not allowed");
         }
         ActionHandler handler = null;
-        if(workflow.getState(workflowState.getStateForAction(action).getName())!=null)
-                handler = workflow.getState(workflowState.getStateForAction(action).getName()).getTransitionHandler();
+        if (workflow.getState(workflowState.getStateForAction(action).getName()) != null)
+            handler = workflow.getState(workflowState.getStateForAction(action).getName()).getTransitionHandler();
         if (handler != null) {
 
             if (handler.beforeAction(opportunity)) {
