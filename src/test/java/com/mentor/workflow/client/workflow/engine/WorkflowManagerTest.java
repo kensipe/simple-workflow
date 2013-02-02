@@ -1,6 +1,11 @@
 package com.mentor.workflow.client.workflow.engine;
 
+import com.mentor.workflow.client.WorkflowComponent;
+import com.mentor.workflow.client.exception.InvalidWorkflowException;
+import com.mentor.workflow.client.workflow.Action;
 import junit.framework.TestCase;
+
+import java.util.List;
 
 /**
  * @author: ksipe
@@ -55,31 +60,30 @@ public class WorkflowManagerTest extends TestCase {
     // todo:  get these working
 //    public void testGetActions() throws Exception {
 //
-//        WorkflowComponent opportunity = new WorkflowComponent();
-//        opportunity.setOppType("DummyPlugin");
-//        opportunity.setStatus("Begin");
+//        WorkflowComponent component = new WorkflowComponent();
+//        component.setStatus("Begin");
 //
-//        List<Action> actions = workflowManager.getActions(opportunity);
+//        List<Action> actions = workflowManager.getActions(component);
 //        assertEquals(2, actions.size());
 //
-//        opportunity.setStatus("FirstState");
-//        actions = workflowManager.getActions(opportunity);
+//        component.setStatus("FirstState");
+//        actions = workflowManager.getActions(component);
 //        assertEquals(1, actions.size());
 //        assertEquals("second", actions.get(0).getName());
 //
-//        opportunity.setStatus("SecondState");
-//        actions = workflowManager.getActions(opportunity);
+//        component.setStatus("SecondState");
+//        actions = workflowManager.getActions(component);
 //        assertEquals(2, actions.size());
 //
 //        // testing actions on final state... even though this test configuration
 //        // has an action on the final state the engine should indicate there are zero
-//        opportunity.setStatus("Final");
-//        actions = workflowManager.getActions(opportunity);
+//        component.setStatus("Final");
+//        actions = workflowManager.getActions(component);
 //        assertEquals(0, actions.size());
 //
-//        opportunity.setStatus("BAD-STATUS");
+//        component.setStatus("BAD-STATUS");
 //        try {
-//            workflowManager.getActions(opportunity);
+//            workflowManager.getActions(component);
 //            fail("blah engine should fail for bad state");
 //        } catch (InvalidWorkflowException e) {
 //            // expected

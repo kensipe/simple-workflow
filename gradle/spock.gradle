@@ -7,7 +7,7 @@ dependencies {
 //    groovy 'org.codehaus.groovy:groovy-all:2.0.5'
     testCompile "org.codehaus.groovy:groovy-all:2.0.5"
     testCompile "org.spockframework:spock-core:$spockVersion"
-    testCompile "org.spockframework:spock-spring:$spockVersion"   
+//    testCompile "org.spockframework:spock-spring:$spockVersion"
 }
 
 // for spock to live in test java tree
