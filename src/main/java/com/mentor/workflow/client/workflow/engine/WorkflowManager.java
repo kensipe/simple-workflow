@@ -4,9 +4,6 @@ import com.mentor.workflow.client.WorkflowComponent;
 import com.mentor.workflow.client.exception.InvalidWorkflowException;
 import com.mentor.workflow.client.workflow.Action;
 import com.mentor.workflow.client.workflow.Workflow;
-import com.mentor.workflow.client.workflow.WorkflowConfiguration;
-import com.mentor.workflow.client.workflow.WorkflowState;
-import com.mentor.workflow.client.workflow.XmlWorkflowConfiguration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -30,45 +27,16 @@ public class WorkflowManager {
 
     //    @Autowired
     private WorkflowEngine workflowEngine = new WorkflowEngine();
+    // cache of workflow... assumes 1 workflow for all components managed under the manager
+    private WorkflowConfiguration configuration;
 
-//    @Autowired
-//    private ApplicationContext ctx;
 
-    public void register() {
+    public void init(WorkflowConfiguration configuration) {
+        this.configuration = configuration;
 
-        // todo:  obviously rewrite!
-        WorkflowConfiguration workflowConfiguration = new XmlWorkflowConfiguration("");
-        if (isWorkflowConfig(workflowConfiguration)) {
-            logger.debug("plugin has no workflow configuration");
-            return;
-        }
-        Workflow workflow = workflowConfiguration.getWorkflow();
-
+        Workflow workflow = configuration.getWorkflow();
         if (workflow.getInitialState() == null) {
             logger.error("no initial state!");
-        }
-    }
-
-    private boolean isWorkflowConfig(WorkflowConfiguration workflowConfiguration) {
-        return workflowConfiguration == null || workflowConfiguration.getWorkflow() == null;
-    }
-
-    public void registerActionHandlers(WorkflowConfiguration config) {
-
-        if (isInvalidWorkflowConfig(config)) {
-            logger.debug("plugin has no workflow configuration");
-            return;
-        }
-
-        Workflow workflow = config.getWorkflow();
-
-        logger.debug("Plugin: " + config);
-
-        for (WorkflowState state : workflow.getWorkflowStates()) {
-            if (state.getTransitionHandler() != null) {
-                logger.debug("dummy stuff because it isn't spring");  // todo:  fix me!
-//                ctx.getAutowireCapableBeanFactory().autowireBean(state.getTransitionHandler());
-            }
         }
     }
 
@@ -93,12 +61,10 @@ public class WorkflowManager {
 
     private Workflow getWorkflow(WorkflowComponent component) {
 
-        logger.debug(component.getStatus());  // todo:  bogus.. rewrite
-//        OpportunityPlugin plugin = pluginMan.getPlugin(component.getOppType());
-//        validatePlugin(component, plugin);
-        // todo:  obviously rewrite this!
-        WorkflowConfiguration workflowConfiguration = new XmlWorkflowConfiguration("");
-        return workflowConfiguration.getWorkflow();
+        // this might allow a component to know the workflow it is associated with and pull the right one
+        logger.debug("component: {} with status: {} needs workflow: {}", component.getId(), component.getStatus(), configuration.getWorkflow().getName());
+
+        return configuration.getWorkflow();
     }
 
     public String invokeAction(WorkflowComponent component, Action action) {

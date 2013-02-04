@@ -41,7 +41,7 @@ public class WorkFlowParserUtil {
 
 //        validate(filename);
         logger.debug(" XML successfully validated.. ");
-        Document doc = getDOMHandle(filename);
+        Document doc = getDOMHandleFromFile(filename);
         logger.debug("Root element :" + doc.getDocumentElement().getNodeName());
 
         Element rootElement = doc.getDocumentElement();
@@ -101,7 +101,7 @@ public class WorkFlowParserUtil {
         }
     }
 
-    private Document getDOMHandle(String filename) {
+    private Document getDOMHandleFromFile(String filename) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         Document doc;
         DocumentBuilder db;
@@ -120,8 +120,7 @@ public class WorkFlowParserUtil {
 
     private InputStream getInputStreamFrom(String classPathFileLocation) throws IOException {
 //        return new ClassPathResource(classPathFileLocation).getInputStream();
-        // todo:  (kgs) fix this
-        return null;
+        return ClassLoader.getSystemResourceAsStream(classPathFileLocation);
     }
 
     private void buildWorkFlowConfig(Set<WorkflowState> workflowSet, List<ActionStateMapping> actions, Element tag) {
