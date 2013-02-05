@@ -1,11 +1,6 @@
-package com.mentor.workflow.client.workflow.engine;
+package com.mentor.workflow.engine;
 
-import com.mentor.workflow.client.WorkflowComponent;
-import com.mentor.workflow.client.exception.InvalidWorkflowException;
-import com.mentor.workflow.client.workflow.Action;
 import junit.framework.TestCase;
-
-import java.util.List;
 
 /**
  * @author: ksipe

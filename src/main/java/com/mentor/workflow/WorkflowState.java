@@ -1,4 +1,4 @@
-package com.mentor.workflow.client.workflow;
+package com.mentor.workflow;
 
 import java.util.HashSet;
 import java.util.Set;

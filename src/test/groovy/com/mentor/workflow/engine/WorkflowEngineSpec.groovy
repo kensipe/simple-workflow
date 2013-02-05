@@ -1,8 +1,8 @@
-package com.mentor.workflow.client.workflow.engine
+package com.mentor.workflow.engine
 
-import com.mentor.workflow.client.WorkflowComponent
-import com.mentor.workflow.client.exception.InvalidWorkflowException
-import com.mentor.workflow.client.workflow.*
+import com.mentor.workflow.WorkflowComponent
+import com.mentor.workflow.exception.InvalidWorkflowException
+import com.mentor.workflow.*
 import spock.lang.Specification
 
 /**

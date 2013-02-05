@@ -1,4 +1,4 @@
-package com.mentor.workflow.client.exception;
+package com.mentor.workflow.exception;
 
 /**
  * @author: ksipe

@@ -1,9 +1,9 @@
-package com.mentor.workflow.client.workflow.engine;
+package com.mentor.workflow.engine;
 
-import com.mentor.workflow.client.WorkflowComponent;
-import com.mentor.workflow.client.exception.InvalidWorkflowException;
-import com.mentor.workflow.client.workflow.Action;
-import com.mentor.workflow.client.workflow.Workflow;
+import com.mentor.workflow.WorkflowComponent;
+import com.mentor.workflow.exception.InvalidWorkflowException;
+import com.mentor.workflow.Action;
+import com.mentor.workflow.Workflow;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

@@ -1,6 +1,6 @@
-package com.mentor.workflow.client.workflow.engine;
+package com.mentor.workflow.engine;
 
-import com.mentor.workflow.client.workflow.Workflow;
+import com.mentor.workflow.Workflow;
 
 /**
  * @author ksipe

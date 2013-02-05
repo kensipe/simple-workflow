@@ -1,8 +1,7 @@
-package com.mentor.workflow.client.workflow.engine;
+package com.mentor.workflow.engine;
 
 
-import com.mentor.workflow.client.workflow.WorkFlowParserUtil;
-import com.mentor.workflow.client.workflow.Workflow;
+import com.mentor.workflow.Workflow;
 
 /**
  * This class can be used to configure the plugin with workflow specified in a Xml.

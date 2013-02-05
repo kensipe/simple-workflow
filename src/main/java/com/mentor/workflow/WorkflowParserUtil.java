@@ -1,6 +1,5 @@
-package com.mentor.workflow.client.workflow;
+package com.mentor.workflow;
 
-import com.mentor.workflow.client.exception.InvalidWorkflowException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -10,11 +9,7 @@ import org.w3c.dom.NodeList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.transform.Source;
-import javax.xml.transform.stream.StreamSource;
-import javax.xml.validation.Schema;
-import javax.xml.validation.SchemaFactory;
-import javax.xml.validation.Validator;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -22,28 +17,47 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import com.mentor.workflow.exception.*;
+
 //import org.springframework.core.io.ClassPathResource;
 
 /**
- * Util class used by XmlWorkflowConfiguration class to generate workflow by validating & parsing user specified XML.
+ * Util class used by XmlWorkflowConfiguration class to generate workflow by validating & parsing user specified XML... this is
+ * from some older code and should be converted to use xstream IMO
  *
  * @author ksipe
  */
 
-public class WorkFlowParserUtil {
+public class WorkflowParserUtil {
     private final Logger logger = LoggerFactory.getLogger(getClass());
     // todo:  convert to xstream
 
-    //    todo(kgs): schema
-    private static final String SCHEMA_LOCATION = "/Workflow.xsd";
+    // crappy code with redundancy ..it all goes away with xstream... so I've left it.
 
-    public Workflow parse(String filename) {
-
-//        validate(filename);
-        logger.debug(" XML successfully validated.. ");
-        Document doc = getDOMHandleFromFile(filename);
+    public Workflow parseFromString(String workflowXml) {
+        Document doc = getDOMHandleFromString(workflowXml);
         logger.debug("Root element :" + doc.getDocumentElement().getNodeName());
 
+        return getWorkflowFromDOM(doc);
+    }
+
+    public Workflow parseFromFile(String filename) {
+
+        Document doc = getDOMHandleFromClasspathFile(filename);
+        logger.debug("Root element :" + doc.getDocumentElement().getNodeName());
+
+        return getWorkflowFromDOM(doc);
+    }
+
+    public Workflow parseFromFile(File file) {
+
+        Document doc = getDOMHandleFromFile(file);
+        logger.debug("Root element :" + doc.getDocumentElement().getNodeName());
+
+        return getWorkflowFromDOM(doc);
+    }
+
+    private Workflow getWorkflowFromDOM(Document doc) {
         Element rootElement = doc.getDocumentElement();
         NodeList childNodes = rootElement.getChildNodes();
 
@@ -58,24 +72,7 @@ public class WorkFlowParserUtil {
                 buildWorkFlowConfig(workflowSet, actions, child);
             }
         }
-        Workflow workflow = new Workflow(workflowSet);
-
-        return workflow;
-    }
-
-    protected void validate(String fileToValidate) {
-        SchemaFactory factory = SchemaFactory.newInstance("http://www.w3.org/2001/XMLSchema");
-        try {
-            StreamSource streamSource = new StreamSource(getInputStreamFrom(SCHEMA_LOCATION));
-            Schema schema = factory.newSchema(streamSource);
-            Validator validator = schema.newValidator();
-
-            Source source = new StreamSource(getInputStreamFrom(fileToValidate));
-            validator.validate(source);
-        } catch (Exception e) {
-            logger.error("Exception occured while validating Xml" + e.toString());
-            throw new InvalidWorkflowException(e.getMessage());
-        }
+        return new Workflow(workflowSet);
     }
 
     private void buildCommonActions(Element tag, List<ActionStateMapping> actions, Set<WorkflowState> workflowSet) {
@@ -101,7 +98,7 @@ public class WorkFlowParserUtil {
         }
     }
 
-    private Document getDOMHandleFromFile(String filename) {
+    private Document getDOMHandleFromClasspathFile(String filename) {
         DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
         Document doc;
         DocumentBuilder db;
@@ -111,7 +108,41 @@ public class WorkFlowParserUtil {
             doc.getDocumentElement().normalize();
 
         } catch (Exception e) {
-            String msg = "Exception occured while parsing Xml. " + e.toString();
+            String msg = "Exception occured while parsing Xml: " + e.toString();
+            logger.debug(msg);
+            throw new InvalidWorkflowException(msg);
+        }
+        return doc;
+    }
+
+    private Document getDOMHandleFromFile(File file) {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        Document doc;
+        DocumentBuilder db;
+        try {
+            db = dbf.newDocumentBuilder();
+            doc = db.parse(file);
+            doc.getDocumentElement().normalize();
+
+        } catch (Exception e) {
+            String msg = "Exception occured while parsing Xml: " + e.toString();
+            logger.debug(msg);
+            throw new InvalidWorkflowException(msg);
+        }
+        return doc;
+    }
+
+    private Document getDOMHandleFromString(String workflowXML) {
+        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
+        Document doc;
+        DocumentBuilder db;
+        try {
+            db = dbf.newDocumentBuilder();
+            doc = db.parse(workflowXML);
+            doc.getDocumentElement().normalize();
+
+        } catch (Exception e) {
+            String msg = "Exception occured while parsing Xml: " + e.toString();
             logger.debug(msg);
             throw new InvalidWorkflowException(msg);
         }

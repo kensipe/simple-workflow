@@ -1,7 +1,5 @@
-package com.mentor.workflow.client.workflow;
+package com.mentor.workflow;
 
-
-import com.mentor.workflow.client.WorkflowComponent;
 
 /**
  * @author ksipe
@@ -20,7 +18,8 @@ public interface ActionHandler {
      * A callback handler that will be fired on successful transition to this state the component will
      * have the state updated
      *
+     * @param action
      * @param component the component for which this workflow applies will be passed in
      */
-    void onAction(WorkflowComponent component);
+    void onAction(Action action, WorkflowComponent component);
 }

@@ -1,4 +1,4 @@
-package com.mentor.workflow.client.workflow;
+package com.mentor.workflow;
 
 
 /**

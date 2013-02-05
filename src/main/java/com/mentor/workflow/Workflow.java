@@ -1,6 +1,6 @@
-package com.mentor.workflow.client.workflow;
+package com.mentor.workflow;
 
-import com.mentor.workflow.client.exception.InvalidWorkflowException;
+import com.mentor.workflow.exception.InvalidWorkflowException;
 
 import java.util.Collection;
 import java.util.HashMap;

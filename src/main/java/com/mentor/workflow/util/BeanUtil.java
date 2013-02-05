@@ -1,6 +1,6 @@
-package com.mentor.workflow.client.util;
+package com.mentor.workflow.util;
 
-import com.mentor.workflow.client.exception.BeanCreationException;
+import com.mentor.workflow.exception.BeanCreationException;
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConvertUtils;
 import org.apache.commons.beanutils.PropertyUtils;

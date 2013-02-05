@@ -1,11 +1,11 @@
-package com.mentor.workflow.client.workflow.engine;
+package com.mentor.workflow.engine;
 
-import com.mentor.workflow.client.WorkflowComponent;
-import com.mentor.workflow.client.exception.InvalidWorkflowException;
-import com.mentor.workflow.client.workflow.Action;
-import com.mentor.workflow.client.workflow.ActionHandler;
-import com.mentor.workflow.client.workflow.Workflow;
-import com.mentor.workflow.client.workflow.WorkflowState;
+import com.mentor.workflow.WorkflowComponent;
+import com.mentor.workflow.exception.InvalidWorkflowException;
+import com.mentor.workflow.Action;
+import com.mentor.workflow.ActionHandler;
+import com.mentor.workflow.Workflow;
+import com.mentor.workflow.WorkflowState;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -53,7 +53,7 @@ public class WorkflowEngine {
         if (continueAfterBeforeAction(handler, component)) {
             currentState = getNextStateName(workflowState, action);
             component.setStatus(currentState);
-            invokeHandlerOnAction(component, handler);
+            invokeHandlerOnAction(component, handler, action);
         }
 
         return currentState;
@@ -81,10 +81,10 @@ public class WorkflowEngine {
         return handler;
     }
 
-    private void invokeHandlerOnAction(WorkflowComponent component, ActionHandler handler) {
+    private void invokeHandlerOnAction(WorkflowComponent component, ActionHandler handler, Action action) {
         if (handler != null) {
             try {
-                handler.onAction(component);
+                handler.onAction(action, component);
             } catch (Exception e) {
                 logger.error("error on handler.onAction {}", handler.getClass(), e);
             }

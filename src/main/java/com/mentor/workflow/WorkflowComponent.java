@@ -1,4 +1,4 @@
-package com.mentor.workflow.client;
+package com.mentor.workflow;
 
 import java.util.HashMap;
 import java.util.Map;
