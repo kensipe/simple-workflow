@@ -1,9 +1,9 @@
 package com.mentor.workflow.engine;
 
-import com.mentor.workflow.WorkflowComponent;
-import com.mentor.workflow.exception.InvalidWorkflowException;
 import com.mentor.workflow.Action;
 import com.mentor.workflow.Workflow;
+import com.mentor.workflow.WorkflowComponent;
+import com.mentor.workflow.exception.InvalidWorkflowException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -38,6 +38,11 @@ public class WorkflowManager {
         if (workflow.getInitialState() == null) {
             logger.error("no initial state!");
         }
+    }
+
+    public void startWorkflow(WorkflowComponent component) {
+        // there may a desire to have an action handler here... or other init stuff of a workflow
+        component.setStatus(getWorkflow(component).getInitialState().getName());
     }
 
     private boolean isInvalidWorkflowConfig(WorkflowConfiguration workflowConfiguration) {

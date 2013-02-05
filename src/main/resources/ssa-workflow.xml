@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<workflow>
+
+	<initial-state id="init">
+        <actions>
+            <action id="user-valid" state="validCustomer"/>
+            <action id="close" />
+        </actions>
+    </initial-state>
+
+    <states>
+        <state id="validCustomer">
+            <actions>
+                <action id="billing-valid" state="validBilling" />
+                <action id="close" />
+            </actions>
+        </state>
+
+
+        <state id="validBilling">
+            <actions>
+                <action id="aircraft-valid" state="validAircraft"/>
+                <action id="close" />
+            </actions>
+        </state>
+
+        <state id="validAircraft">
+            <actions>
+                <action id="aircraft-valid" state="validAircraft"/>
+                <action id="close" />
+                <action id="final" state="Final" />
+            </actions>
+        </state>
+
+
+
+        <state id="Closed" />
+        <state id="Final" /> <!-- final states can be assumed as states with no actions-->
+    </states>
+
+    <!-- maybe even -->
+    <common-actions>
+        <action id="close" state="Closed" />
+    </common-actions>
+</workflow>
+
