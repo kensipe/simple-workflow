@@ -22,6 +22,19 @@ import java.util.List;
 //@Service
 public class WorkflowManager {
 
+    /*//// NOTES:
+          1. anything spring should probably wrap this
+          2. there would be great value in adding guard conditions on the entry of a state... it is possible but cumbersome in that it would have to be a handler on states that could lead to the state
+          3. it would make senses to have listeners on actions... in addition or instead of states
+          4. it would be much better to switch to xstream for xml parsing
+          5. possibly groovy script in xml which replaces the handlers or checkers
+          6. the point of having an interface for the WorkflowConfiguration is that it could abstract a database instead of xml
+          7. probably what... LeavingStateHandler, EnteringStateHandler and ActionHandler.. InitialStateHandler ?
+          8. the system is setup to parse the xml each time a component is passed to it.  It would make sense to make a cache or a singleton or ??? (the challenge is you may want each component to know what workflow is for it.
+          also... it is a great way to manage versioning... "ssav1" or "ssav2"
+          9.
+    ////*/
+
     // todo:  create a spring workflow mgr
     private final Logger logger = LoggerFactory.getLogger(getClass());
 

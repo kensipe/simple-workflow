@@ -23,7 +23,8 @@ public class Workflow {
         this.name = name;
     }
 
-    public Workflow(Set<WorkflowState> states) {
+    public Workflow(Set<WorkflowState> states, String workflowName) {
+        this(workflowName);
         initStateMap(states);
     }
 

@@ -1,5 +1,6 @@
 package com.mentor.workflow;
 
+import com.mentor.workflow.exception.InvalidWorkflowException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.Document;
@@ -17,8 +18,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import com.mentor.workflow.exception.*;
-
 //import org.springframework.core.io.ClassPathResource;
 
 /**
@@ -34,19 +33,12 @@ public class WorkflowParserUtil {
 
     // crappy code with redundancy ..it all goes away with xstream... so I've left it.
 
-    public Workflow parseFromString(String workflowXml) {
-        Document doc = getDOMHandleFromString(workflowXml);
-        logger.debug("Root element :" + doc.getDocumentElement().getNodeName());
-
-        return getWorkflowFromDOM(doc);
-    }
-
     public Workflow parseFromFile(String filename) {
 
         Document doc = getDOMHandleFromClasspathFile(filename);
         logger.debug("Root element :" + doc.getDocumentElement().getNodeName());
 
-        return getWorkflowFromDOM(doc);
+        return getWorkflowFromDOM(doc, filename);
     }
 
     public Workflow parseFromFile(File file) {
@@ -54,10 +46,21 @@ public class WorkflowParserUtil {
         Document doc = getDOMHandleFromFile(file);
         logger.debug("Root element :" + doc.getDocumentElement().getNodeName());
 
-        return getWorkflowFromDOM(doc);
+        String workflowName = getWorkflowNameFromFileName(file);
+
+        return getWorkflowFromDOM(doc, workflowName);
     }
 
-    private Workflow getWorkflowFromDOM(Document doc) {
+    private String getWorkflowNameFromFileName(File file) {
+        String workflowName = file.getName();
+        int index = workflowName.indexOf(".xml");
+        if (index != -1) {
+            workflowName = workflowName.substring(0, index);
+        }
+        return workflowName;
+    }
+
+    private Workflow getWorkflowFromDOM(Document doc, String workflowName) {
         Element rootElement = doc.getDocumentElement();
         NodeList childNodes = rootElement.getChildNodes();
 
@@ -72,7 +75,7 @@ public class WorkflowParserUtil {
                 buildWorkFlowConfig(workflowSet, actions, child);
             }
         }
-        return new Workflow(workflowSet);
+        return new Workflow(workflowSet, workflowName);
     }
 
     private void buildCommonActions(Element tag, List<ActionStateMapping> actions, Set<WorkflowState> workflowSet) {

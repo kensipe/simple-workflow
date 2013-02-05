@@ -22,8 +22,13 @@ public class WorkflowEngine {
 
     private final Logger logger = LoggerFactory.getLogger(getClass());
 
+    public List<Action> getAvailableActions(Workflow workflow, WorkflowComponent component) {
+        return getAvailableActions(workflow,component.getStatus());
+    }
+
     public List<Action> getAvailableActions(Workflow workflow, String currentState) {
-        WorkflowState workflowState = workflow.getState(currentState);
+
+        WorkflowState workflowState =  currentState == null? workflow.getInitialState() : workflow.getState(currentState);
         List<Action> actions = null;
         if (workflowState == null) {
             // we are in a bad state... a state that doesn't exist in the workflow

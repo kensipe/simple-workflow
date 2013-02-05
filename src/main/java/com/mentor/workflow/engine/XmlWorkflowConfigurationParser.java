@@ -26,18 +26,4 @@ public class XmlWorkflowConfigurationParser {
         WorkflowConfiguration configuration =  new XmlWorkflowConfiguration(workflow);
         return configuration;
     }
-
-    public static WorkflowConfiguration getWorkflowConfigurationFromXml(String xml) {
-
-        Workflow workflow =  parser.parseFromString(xml);
-        WorkflowConfiguration configuration =  new XmlWorkflowConfiguration(workflow);
-        return configuration;
-    }
-
-    // todo:  remove
-    public static void main(String[] args) {
-
-         WorkflowConfiguration configuration =  XmlWorkflowConfigurationParser.getWorkflowConfiguration("example-workflow.xml");
-         configuration.getWorkflow();
-    }
 }

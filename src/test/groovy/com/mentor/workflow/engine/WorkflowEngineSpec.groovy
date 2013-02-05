@@ -1,8 +1,7 @@
 package com.mentor.workflow.engine
 
-import com.mentor.workflow.WorkflowComponent
-import com.mentor.workflow.exception.InvalidWorkflowException
 import com.mentor.workflow.*
+import com.mentor.workflow.exception.InvalidWorkflowException
 import spock.lang.Specification
 
 /**
@@ -59,7 +58,7 @@ class WorkflowEngineSpec extends Specification {
 
     def "available actions on a happy case"() {
         states.add(buildState("initial", WorkflowStateType.INITIAL))
-        states.add(buildStateWithActions("state"))
+        states.add(buildStateWithActions("state", WorkflowStateType.INTERMEDIATE))
         workflow.setWorkflowStates(states)
 
         when:
@@ -68,6 +67,18 @@ class WorkflowEngineSpec extends Specification {
         then:
         list != null
         list.size() == 1
+    }
+
+    def "avaible actions from an initial state"() {
+        states.add(buildStateWithActions("initial", WorkflowStateType.INITIAL))
+        workflow.setWorkflowStates(states)
+
+        when:
+        def actions = engine.getAvailableActions(workflow, new WorkflowComponent(status: "initial"))
+
+        then:
+        actions.size() == 1
+        actions[0].name == "action"
     }
 
     def "invoke action fails when action is not accessible from current state"() {
@@ -99,7 +110,7 @@ class WorkflowEngineSpec extends Specification {
     def "state depends on handler returns"() {
         def handler = Mock(ActionHandler);
 
-        WorkflowState state = buildStateWithActions("state");
+        WorkflowState state = buildStateWithActions("state", WorkflowStateType.INTERMEDIATE);
         state.setTransitionHandler(handler);
         WorkflowState initial = buildState("initial", WorkflowStateType.INITIAL);
         initial.addFlow(new ActionStateMapping(new Action("try"), state));
@@ -129,8 +140,8 @@ class WorkflowEngineSpec extends Specification {
         return new WorkflowState(stateName, type);
     }
 
-    def buildStateWithActions(String stateName) {
-        WorkflowState state = new WorkflowState(stateName);
+    def buildStateWithActions(String stateName, WorkflowStateType type) {
+        WorkflowState state = new WorkflowState(stateName, type);
         WorkflowState nextState = new WorkflowState("nextState");
         ActionStateMapping mapping1 = new ActionStateMapping(new Action("action"), nextState);
         state.addFlow(mapping1);
