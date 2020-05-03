@@ -17,10 +17,10 @@ class WorkflowSpec extends Specification {
         stateSet.add(firstState)
 
         when:
-        new Workflow(stateSet)
+        new Workflow(stateSet, "test")
 
         then:
-        InvalidWorkflowException e = thrown()
+        thrown InvalidWorkflowException
     }
 
     def "number of actions of good workflow"() {
@@ -84,7 +84,7 @@ class WorkflowSpec extends Specification {
         workflowSet.add(secondState);
         workflowSet.add(finalState);
 
-        Workflow workflow = new Workflow(workflowSet);
+        Workflow workflow = new Workflow(workflowSet, "test");
         return workflow;
     }
 }
