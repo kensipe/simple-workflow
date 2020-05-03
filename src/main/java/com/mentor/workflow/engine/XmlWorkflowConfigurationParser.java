@@ -10,20 +10,18 @@ import java.io.File;
  */
 public class XmlWorkflowConfigurationParser {
 
-    private static WorkflowParserUtil parser = new WorkflowParserUtil();  // using older parser...
+    private static final WorkflowParserUtil parser = new WorkflowParserUtil();  // using older parser...
 
 
     public static WorkflowConfiguration getWorkflowConfiguration(String fileName) {
 
         Workflow workflow =  parser.parseFromFile(fileName);
-        WorkflowConfiguration configuration =  new XmlWorkflowConfiguration(workflow);
-        return configuration;
+        return new XmlWorkflowConfiguration(workflow);
     }
 
     public static WorkflowConfiguration getWorkflowConfiguration(File file) {
 
         Workflow workflow =  parser.parseFromFile(file);
-        WorkflowConfiguration configuration =  new XmlWorkflowConfiguration(workflow);
-        return configuration;
+        return new XmlWorkflowConfiguration(workflow);
     }
 }

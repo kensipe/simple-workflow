@@ -1,6 +1,7 @@
 package com.mentor.workflow;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -14,7 +15,7 @@ public class WorkflowState {
 
     private ActionHandler transitionHandler;
 
-    private Set<ActionStateMapping> allowedActions = new HashSet<ActionStateMapping>();
+    private final Set<ActionStateMapping> allowedActions = new HashSet<>();
 
     public WorkflowState(String name) {
         this.name = name;
@@ -90,9 +91,7 @@ public class WorkflowState {
 
         WorkflowState state = (WorkflowState) o;
 
-        if (name != null ? !name.equals(state.name) : state.name != null) return false;
-
-        return true;
+        return Objects.equals(name, state.name);
     }
 
     @Override

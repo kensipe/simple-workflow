@@ -2,7 +2,7 @@ package com.mentor.workflow;
 
 
 /**
- * A convenience abstract class for creating an ActionHandler... looks like it's lost its value...
+ * A convenience abstract class for creating an ActionHandler... looks like may not be needed any longer... 
  *
  * @author ksipe
  */

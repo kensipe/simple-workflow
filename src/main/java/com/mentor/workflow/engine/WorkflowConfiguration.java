@@ -7,5 +7,5 @@ import com.mentor.workflow.Workflow;
  */
 public interface WorkflowConfiguration {
 
-    public Workflow getWorkflow();
+    Workflow getWorkflow();
 }

@@ -14,7 +14,7 @@ public class Workflow {
 
     private String name;
     private WorkflowState initialState;
-    private Map<String, WorkflowState> stateMap = new HashMap<String, WorkflowState>();
+    private final Map<String, WorkflowState> stateMap = new HashMap<>();
 
     public Workflow() {
     }

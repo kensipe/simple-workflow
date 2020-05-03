@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-//import org.springframework.stereotype.Service;  // look to have a SpringWorkflowEngine which contains this
+//import org.springframework.stereotype.Service;
 
 /**
  * @author: ksipe
@@ -29,7 +29,7 @@ public class WorkflowEngine {
     public List<Action> getAvailableActions(Workflow workflow, String currentState) {
 
         WorkflowState workflowState =  currentState == null? workflow.getInitialState() : workflow.getState(currentState);
-        List<Action> actions = null;
+        List<Action> actions;
         if (workflowState == null) {
             // we are in a bad state... a state that doesn't exist in the workflow
             String message = currentState + " state does not exist in the workflow: " + workflow.getName();
@@ -37,10 +37,10 @@ public class WorkflowEngine {
             throw new InvalidWorkflowException(message);
         }
         if (!workflowState.isFinalState()) {
-            actions = new ArrayList<Action>(Arrays.asList(workflowState.getActions()));
+            actions = new ArrayList<>(Arrays.asList(workflowState.getActions()));
         } else {
             // we ignore actions if it is the final state
-            actions = new ArrayList<Action>();
+            actions = new ArrayList<>();
         }
         return actions;
     }

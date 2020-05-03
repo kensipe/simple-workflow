@@ -18,7 +18,7 @@ public class WorkflowComponent {
     private String status;
     private String workflow;
 
-    private Map<String, String> properties = new HashMap<String, String>();
+    private Map<String, String> properties = new HashMap<>();
 
     public long getId() {
         return id;
@@ -48,7 +48,7 @@ public class WorkflowComponent {
         return properties;
     }
 
-    public void setProperties(Map properties) {
+    public void setProperties(Map<String, String> properties) {
         this.properties = properties;
     }
 

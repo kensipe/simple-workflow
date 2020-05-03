@@ -1,5 +1,7 @@
 package com.mentor.workflow;
 
+import java.util.Objects;
+
 /**
  * @author: ksipe
  */
@@ -38,9 +40,7 @@ public class Action {
 
         Action action1 = (Action) o;
 
-        if (name != null ? !name.equals(action1.name) : action1.name != null) return false;
-
-        return true;
+        return Objects.equals(name, action1.name);
     }
 
     @Override

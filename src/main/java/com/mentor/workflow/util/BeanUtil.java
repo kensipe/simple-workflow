@@ -32,14 +32,14 @@ public class BeanUtil {
     public static Map<String, Object> describe(Object bean) {
 
         if (bean == null) {
-            return new HashMap<String, Object>();
+            return new HashMap<>();
         }
 
         if (logger.isDebugEnabled()) {
             logger.debug("Describing bean: " + bean.getClass().getName());
         }
 
-        Map<String, Object> description = new HashMap<String, Object>();
+        Map<String, Object> description = new HashMap<>();
 
         PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(bean);
         for (PropertyDescriptor descriptor : descriptors) {
@@ -94,7 +94,7 @@ public class BeanUtil {
     public static Map<String, Object> populateWithRemainder(Object bean, Map<String, Object> properties) {
 
         if (properties == null)
-            return new HashMap<String, Object>();
+            return new HashMap<>();
         if (bean == null)
             return properties;
 
@@ -110,9 +110,9 @@ public class BeanUtil {
 
     private static Map<String, Object> reduceToRemainderProperties(Object bean, Map<String, Object> properties) {
 
-        Map<String, Object> overflow = new HashMap<String, Object>();
+        Map<String, Object> overflow = new HashMap<>();
         PropertyDescriptor[] descriptors = PropertyUtils.getPropertyDescriptors(bean);
-        Set<String> beanPropertySet = new HashSet<String>();
+        Set<String> beanPropertySet = new HashSet<>();
 
         for (PropertyDescriptor descriptor : descriptors) {
             beanPropertySet.add(descriptor.getName());
@@ -129,16 +129,16 @@ public class BeanUtil {
     }
 
     public static Object instantiateBean(Class beanClass) {
-        Object entityBean = null;
+        Object entityBean;
         if (beanClass == null) {
             throw new BeanCreationException("null can not be instantiated");
         }
         try {
             entityBean = beanClass.newInstance();
         } catch (Exception e) {
-            String errorMessge = "failure to create class: " + beanClass.getName();
-            logger.error(errorMessge, e);
-            throw new BeanCreationException(errorMessge);
+            String errorMessage = "failure to create class: " + beanClass.getName();
+            logger.error(errorMessage, e);
+            throw new BeanCreationException(errorMessage);
         }
         return entityBean;
     }

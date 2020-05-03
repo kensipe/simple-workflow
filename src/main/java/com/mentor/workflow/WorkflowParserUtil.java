@@ -11,7 +11,6 @@ import org.w3c.dom.NodeList;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import java.io.File;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -64,8 +63,8 @@ public class WorkflowParserUtil {
         Element rootElement = doc.getDocumentElement();
         NodeList childNodes = rootElement.getChildNodes();
 
-        Set<WorkflowState> workflowSet = new HashSet<WorkflowState>();
-        List<ActionStateMapping> actions = new ArrayList<ActionStateMapping>();
+        Set<WorkflowState> workflowSet = new HashSet<>();
+        List<ActionStateMapping> actions = new ArrayList<>();
         buildCommonActions(rootElement, actions, workflowSet);
         for (int counter = 0; counter < childNodes.getLength(); counter++) {
             Node nNode = childNodes.item(counter);
@@ -111,7 +110,7 @@ public class WorkflowParserUtil {
             doc.getDocumentElement().normalize();
 
         } catch (Exception e) {
-            String msg = "Exception occured while parsing Xml: " + e.toString();
+            String msg = "Exception occurred while parsing Xml: " + e.toString();
             logger.debug(msg);
             throw new InvalidWorkflowException(msg);
         }
@@ -128,32 +127,14 @@ public class WorkflowParserUtil {
             doc.getDocumentElement().normalize();
 
         } catch (Exception e) {
-            String msg = "Exception occured while parsing Xml: " + e.toString();
+            String msg = "Exception occurred while parsing Xml: " + e.toString();
             logger.debug(msg);
             throw new InvalidWorkflowException(msg);
         }
         return doc;
     }
 
-    private Document getDOMHandleFromString(String workflowXML) {
-        DocumentBuilderFactory dbf = DocumentBuilderFactory.newInstance();
-        Document doc;
-        DocumentBuilder db;
-        try {
-            db = dbf.newDocumentBuilder();
-            doc = db.parse(workflowXML);
-            doc.getDocumentElement().normalize();
-
-        } catch (Exception e) {
-            String msg = "Exception occured while parsing Xml: " + e.toString();
-            logger.debug(msg);
-            throw new InvalidWorkflowException(msg);
-        }
-        return doc;
-    }
-
-    private InputStream getInputStreamFrom(String classPathFileLocation) throws IOException {
-//        return new ClassPathResource(classPathFileLocation).getInputStream();
+    private InputStream getInputStreamFrom(String classPathFileLocation) {
         return ClassLoader.getSystemResourceAsStream(classPathFileLocation);
     }
 
